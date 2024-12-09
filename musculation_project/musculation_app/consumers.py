@@ -3,19 +3,16 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 
 class MuscleTrackerConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        # Accepter la connexion
         await self.accept()
 
     async def disconnect(self, close_code):
-        # Gérer la déconnexion
         pass
 
     async def receive(self, text_data):
-        # Traiter les messages reçus du client
-        text_data_json = json.loads(text_data)
-        message = text_data_json['message']
+        data = json.loads(text_data)
+        message = data.get('message', '')
 
-        # Répondre au client
+        # Echo the message back
         await self.send(text_data=json.dumps({
-            'message': f"Reçu : {message}"
+            'message': f'Received: {message}'
         }))

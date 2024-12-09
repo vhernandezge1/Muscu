@@ -1,6 +1,6 @@
-from django.urls import re_path
-from musculation_app import consumers  
+from django.urls import path
+from musculation_app.consumers import MuscleTrackerConsumer
 
 websocket_urlpatterns = [
-    re_path(r'ws/muscle_tracker/', consumers.MuscleTrackerConsumer.as_asgi()),  
+    path('ws/muscle_tracker/', MuscleTrackerConsumer.as_asgi()),
 ]
