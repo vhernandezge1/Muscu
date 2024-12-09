@@ -58,6 +58,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'musculation_app.wsgi.application'
+ASGI_APPLICATION = "musculation_project.asgi.application"
 
 
 # Database
@@ -116,7 +117,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
+            "hosts": [('127.0.0.1', 6380)],
         },
     },
 }
