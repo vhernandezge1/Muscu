@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'channels',
+    'training',
     'chat',  # For WebSocket support
 ]
 
