@@ -41,7 +41,7 @@ ROOT_URLCONF = 'fitness_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],  # Indique à Django de chercher les templates ici
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
