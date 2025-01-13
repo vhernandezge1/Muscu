@@ -81,30 +81,3 @@ Points importants
 Les WebSockets ne fonctionneront correctement qu'avec Daphne ou un autre serveur ASGI.
 
 Configurez votre fichier settings.py pour définir les valeurs appropriées de STATIC_URL et STATIC_ROOT.
-
-Testez l'application en créant des conseils d'entraînement via l'interface d'administration ou en utilisant des données initiales.
-
-Contribution
-
-Les contributions sont les bienvenues !
-
-Forkez le projet
-
-Créez une branche pour votre fonctionnalité :
-
-git checkout -b feature/nouvelle-fonctionnalite
-
-Soumettez une Pull Request
-
-Licence
-
-Ce projet est sous licence MIT. Vous êtes libre de le modifier et de l'utiliser, à condition de mentionner l'auteur original.
-
-Contact
-
-Pour toute question ou problème, contactez-moi à :
-
-Email : valentin.hernandez@ynov.com
-
-GitHub : vhernandezge1
-
