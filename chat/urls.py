@@ -2,6 +2,6 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.index, name='chat_index'),  # Page principale du chat
-    path('send_message/', views.send_message, name='send_message'),  # Endpoint pour envoyer un message
+    path('', views.chat_home, name='chat_home'),  # Route pour /chat/
+    path('<str:room_name>/', views.room, name='room'),  # Route pour /chat/<room_name>/
 ]

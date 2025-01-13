@@ -1,14 +1,13 @@
 from django.shortcuts import render
-from django.http import JsonResponse
 
-# Vue pour la page principale du chat
-def index(request):
-    return render(request, 'chat/index.html')
+def chat_home(request):
+    """
+    Vue pour la page d'accueil de la messagerie.
+    """
+    return render(request, 'chat/home.html')
 
-# Vue pour envoyer un message
-def send_message(request):
-    if request.method == 'POST':
-        message = request.POST.get('message', '')
-        # Tu peux ajouter ici une logique pour sauvegarder le message dans la base de données.
-        return JsonResponse({'status': 'Message received', 'message': message})
-    return JsonResponse({'error': 'Invalid request'}, status=400)
+def room(request, room_name):
+    """
+    Vue pour afficher une salle de chat spécifique.
+    """
+    return render(request, 'chat/room.html', {'room_name': room_name})
