@@ -6,7 +6,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = f'chat_{self.room_name}'
 
-        # Rejoindre le groupe
+        # Joindre le groupe
         await self.channel_layer.group_add(
             self.room_group_name,
             self.channel_name
@@ -21,22 +21,31 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
 
     async def receive(self, text_data):
-        data = json.loads(text_data)
-        message = data['message']
+        """
+        Reçoit un message envoyé par le client et le diffuse à tous les membres de la salle.
+        """
+        try:
+            data = json.loads(text_data)
+            message = data.get('message', '')
 
-        # Envoyer le message au groupe
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'type': 'chat_message',
-                'message': message
-            }
-        )
+            # Diffuser le message au groupe
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'chat_message',
+                    'message': message
+                }
+            )
+        except Exception as e:
+            print(f"Erreur dans receive: {e}")
 
     async def chat_message(self, event):
+        """
+        Diffuse un message reçu du groupe à ce client WebSocket.
+        """
         message = event['message']
 
-        # Envoyer le message au WebSocket
+        # Envoyer le message au client WebSocket
         await self.send(text_data=json.dumps({
             'message': message
         }))

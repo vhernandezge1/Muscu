@@ -1,7 +1,7 @@
 # fitness_project/settings.py
 
 from pathlib import Path
-
+import os
 # Base directory
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -76,3 +76,11 @@ CHANNEL_LAYERS = {
         'BACKEND': 'channels.layers.InMemoryChannelLayer',
     },
 }
+# URL pour accéder aux fichiers statiques
+STATIC_URL = '/static/'
+
+# Dossier contenant les fichiers statiques de ton projet
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+
+# Emplacement où collecter les fichiers statiques avec collectstatic
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
