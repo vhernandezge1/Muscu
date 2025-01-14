@@ -1,7 +1,8 @@
 from django.urls import path
-from . import views
+from . import api, views
 
 urlpatterns = [
-    path('', views.training_home, name='training_home'),  # Route pour /training/
-    path('tips/', views.training_tips, name='training_tips'),  # Route pour /training/tips/
+    path('tips/', views.training_tips, name='training_tips'),
+    path('api/tips/', api.tips_api, name='tips_api'),
+    path('api/tips/<int:pk>/', api.tip_detail_api, name='tip_detail_api'),
 ]

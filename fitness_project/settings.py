@@ -20,7 +20,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'channels',
     'training',
-    'chat',  # For WebSocket support
+    'chat',
+    'api' ,
 ]
 
 # Middleware
