@@ -115,5 +115,5 @@ Ce projet est une application web de gestion de conseils en musculation, incluan
 
 ## Auteur
 
-Projet réalisé dans le cadre d'un TP fil rouge.
+Projet réalisé dans le cadre d'un TP fil rouge par Valentin Hernandez .
 
