@@ -1,83 +1,119 @@
-Musculation Web App
+# Musculation - Application de gestion d'entraînements
 
+Ce projet est une application web de gestion de conseils en musculation, incluant une API REST et une messagerie instantanée. L'objectif principal était de mettre en place une solution full stack avec Django en backend.
 
+---
 
-Installation et Prérequis :
+## Fonctionnalités validées
 
-Python 3.10+
+### 1. **Gestion des conseils d'entraînement**
+- **Consultation des conseils** : Les utilisateurs peuvent voir une liste de conseils d'entraînement disponibles.
+- **API REST pour les conseils** : Endpoint `GET /api/tips/` qui retourne une liste des conseils au format JSON.
 
-Django 5.1+
+### 2. **Messagerie instantanée**
+- **API REST pour le chat** : Endpoint `GET /api/chat/` qui retourne les messages récents.
 
-Django Channels
+### 3. **Modélisation ORM**
+- Deux modèles principaux :
+  - `TrainingTip` : Modèle pour les conseils d'entraînement avec les champs `title`, `description`, et `created_by`.
+  - `Message` : Modèle pour les messages de chat avec les champs `content` et `timestamp`.
 
-Un environnement virtuel Python (recommandé)
+### 4. **Endpoints API REST**
+- **Endpoint principal** :
+  - `GET /api/` : Retourne un message d'accueil avec les informations sur les autres endpoints disponibles.
+- **Endpoints additionnels** :
+  - `GET /api/tips/` : Retourne une liste des conseils d'entraînement.
+  - `GET /api/chat/` : Retourne une liste des messages récents du chat.
 
+### 5. **Tests unitaires**
+- Des tests unitaires ont été rédigés et validés pour :
+  - Les endpoints de l'API (`/api/tips/` et `/api/chat/`).
+  - La vérification du modèle `TrainingTip`.
 
+### 6. **Gestion des utilisateurs**
+- **CustomUser** : Un modèle utilisateur personnalisé avec un champ `role` (élève ou coach).
+- **Système de connexion** : Fonctionnalité d'authentification par l'interface admin de Django.
 
-Étapes d'installation
+---
 
-Clonez le projet :
+## Prérequis
 
-git clone https://github.com/vhernandezge1/Muscu.git
-cd musculation-web-app
+- **Python 3.11 ou version ultérieure**
+- **Django 5.1.4**
+- **SQLite** (par défaut pour le développement local)
 
-Créez un environnement virtuel et activez-le :
+---
 
-python -m venv venv
-source venv/bin/activate  
+## Installation
 
-# Sur Windows : venv\Scripts\activate
+1. **Cloner le dépôt**
+   ```bash
+   git clone <URL_DU_DEPOT>
+   cd <NOM_DU_DOSSIER>
+   ```
 
-Installez les dépendances :
+2. **Créer un environnement virtuel**
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # Sous Windows : venv\Scripts\activate
+   ```
 
-pip install -r requirements.txt
+3. **Installer les dépendances**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-Appliquez les migrations :
+4. **Appliquer les migrations**
+   ```bash
+   python manage.py makemigrations
+   python manage.py migrate
+   ```
 
-python manage.py makemigrations
-python manage.py migrate
+5. **Lancer le serveur**
+   ```bash
+   python manage.py runserver
+   ```
 
-Créez un superutilisateur :
+---
 
-python manage.py createsuperuser
+## Utilisation
 
-Collectez les fichiers statiques :
+### Accès aux pages principales
 
-python manage.py collectstatic
+- **Page d'accueil** : `http://127.0.0.1:8000/`
+- **Conseils d'entraînement** : `http://127.0.0.1:8000/training/tips/`
+- **Interface admin** : `http://127.0.0.1:8000/admin/`
 
-Lancement de l'application
+### Accès à l'API REST
 
-Pour HTTP uniquement :
+- **Accueil de l'API** : `http://127.0.0.1:8000/api/`
+- **Liste des conseils** : `http://127.0.0.1:8000/api/tips/`
+- **Messages récents** : `http://127.0.0.1:8000/api/chat/`
 
-python manage.py runserver
+---
 
+## Tests
 
-Pour activer les WebSockets :
+1. **Exécuter les tests**
+   ```bash
+   python manage.py test
+   ```
 
-Lancez Daphne (nécessaire pour les WebSockets) :
+2. **Couverture des tests**
+   - Tests unitaires sur les endpoints API.
+   - Tests sur les modèles pour valider les champs et les relations.
 
-daphne -p 8000 fitness_project.asgi:application
+---
 
+## Améliorations possibles
 
-Accédez à l'application dans votre navigateur à l'adresse :
+1. **Gestion des rôles et accès** : Limiter l'accès à certaines fonctionnalités selon les rôles.
+2. **Front-end dynamique** : Ajouter des éléments adaptatifs en fonction du rôle de l'utilisateur connecté.
+3. **Mise en production** : Ajouter des configurations pour déployer sur une plateforme cloud.
 
-http://127.0.0.1:8000/
+---
 
-Structure du projet
+## Auteur
 
-fitness_project/ : Configuration principale de Django.
+Projet réalisé dans le cadre d'un TP fil rouge.
 
-training/ : Application pour gérer les conseils d'entraînement.
-
-chat/ : Application pour la messagerie instantanée.
-
-templates/ : Contient les fichiers HTML pour l'interface utilisateur.
-
-static/ : Contient les fichiers CSS et JavaScript.
-
-
-Points importants
-
-Les WebSockets ne fonctionneront correctement qu'avec Daphne ou un autre serveur ASGI.
-
-Configurez votre fichier settings.py pour définir les valeurs appropriées de STATIC_URL et STATIC_ROOT.
