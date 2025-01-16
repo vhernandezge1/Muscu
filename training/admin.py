@@ -3,7 +3,7 @@ from .models import TrainingTip, CustomUser
 
 @admin.register(TrainingTip)
 class TrainingTipAdmin(admin.ModelAdmin):
-    list_display = ('title', 'description', 'created_by')  # 'created_at' retiré
+    list_display = ('title', 'description', 'created_by')  
     list_filter = ('created_by',)
     search_fields = ('title', 'description')
 

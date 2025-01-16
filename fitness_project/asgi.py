@@ -4,7 +4,7 @@ from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.auth import AuthMiddlewareStack
 from django.urls import path
 from chat.consumers import ChatConsumer
-from chat.routing import websocket_urlpatterns  # Importez vos routes WebSocket
+from chat.routing import websocket_urlpatterns 
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'fitness_project.settings')
 
