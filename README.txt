@@ -10,25 +10,25 @@ Installation
 Sans Docker
 Cloner le dépôt
 
-git clone <URL_DU_DEPOT>
+git clone https://github.com/vhernandezge1/Muscu
 cd <NOM_DU_DOSSIER>
-Créer un environnement virtuel
 
+Créer un environnement virtuel:
 python -m venv venv
 source venv/bin/activate  # Sous Windows : venv\Scripts\activate
-Installer les dépendances
 
+Installer les dépendances:
 pip install -r requirements.txt
-Appliquer les migrations
 
+Appliquer les migrations:
 python manage.py makemigrations
 python manage.py migrate
-Lancer le serveur
 
+Lancer le serveur:
 python manage.py runserver
 Avec Docker Compose
-Cloner le dépôt
 
+Cloner le dépôt:
 git clone <URL_DU_DEPOT>
 cd <NOM_DU_DOSSIER>
 
@@ -41,6 +41,7 @@ Admin Django : http://localhost:8000/admin/
 
 Appliquer les migrations:
 docker-compose exec web python manage.py migrate
+
 Créer un superutilisateur:
 docker-compose exec web python manage.py createsuperuser
 
@@ -55,7 +56,6 @@ Liste des conseils : http://127.0.0.1:8000/api/tips/
 Messages récents : http://127.0.0.1:8000/api/chat/
 
 Exécuter les tests :
-
 python manage.py test
 
 Projet réalisé dans le cadre d'un TP fil rouge par Valentin Hernandez.
