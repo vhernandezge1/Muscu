@@ -23,7 +23,7 @@ def register(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('login')  # Redirigez vers la page de connexion après l'inscription
+            return redirect('login')  # Redirige vers la page de connexion après l'inscription
     else:
         form = CustomUserCreationForm()
     return render(request, 'training/register.html', {'form': form})
