@@ -1,5 +1,6 @@
 Musculation - Application de gestion d'entraînements
-Ce projet est une application web de gestion de conseils en musculation, incluant une API REST et une messagerie instantanée. L'objectif principal était de mettre en place une solution full stack avec Django en backend.
+Ce projet est une application web de gestion de conseils en musculation, incluant une API REST et une messagerie instantanée. 
+L'objectif principal était de mettre en place une solution full stack avec Django en backend.
 
 
 Prérequis
