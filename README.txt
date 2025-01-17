@@ -8,11 +8,7 @@ Python 3.11 ou version ultérieure
 Django 5.1.4
 Docker et Docker Compose (pour exécuter l'application dans un conteneur)
 Installation
-Sans Docker
-Cloner le dépôt
 
-git clone https://github.com/vhernandezge1/Muscu
-cd <NOM_DU_DOSSIER>
 
 Créer un environnement virtuel:
 python -m venv venv
@@ -30,7 +26,7 @@ python manage.py runserver
 Avec Docker Compose
 
 Cloner le dépôt:
-git clone <URL_DU_DEPOT>
+git clone https://github.com/vhernandezge1/Muscu
 cd <NOM_DU_DOSSIER>
 
 Construire et démarrer les conteneurs:
