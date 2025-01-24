@@ -18,8 +18,8 @@ Installer les dépendances:
 pip install -r requirements.txt
 
 Appliquer les migrations:
-python manage.py makemigrations
-python manage.py migrate
+python manage.py makemigrations #
+python manage.py migrate #
 
 Lancer le serveur:
 python manage.py runserver
@@ -29,6 +29,9 @@ Cloner le dépôt:
 git clone https://github.com/vhernandezge1/Muscu
 cd <NOM_DU_DOSSIER>
 
+Pour tester la messagerie instantanée : ddaphne -p 8000 fitness_project.asgi:application
+
+Sinon pour le reste : 
 Construire et démarrer les conteneurs:
 docker-compose up --build
 
