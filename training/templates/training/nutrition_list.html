@@ -1,0 +1,18 @@
+{% extends "training/base.html" %}
+{% block title %}Nutrition — Muscu{% endblock %}
+
+{% block content %}
+  <h1>Conseils Nutrition</h1>
+
+  <div class="grid">
+    {% for n in tips %}
+      <article class="card">
+        <h3>{{ n.title }}</h3>
+        {% if n.category %}<div class="tag">{{ n.category }}</div>{% endif %}
+        <p style="margin-top:8px; white-space:pre-wrap;">{{ n.content }}</p>
+      </article>
+    {% empty %}
+      <p>Aucun conseil pour le moment.</p>
+    {% endfor %}
+  </div>
+{% endblock %}

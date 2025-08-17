@@ -1,11 +1,24 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Test Template</title>
-</head>
-<body>
-    <h1>Bienvenue sur mon site Django !</h1>
-    <p>Ceci est un test pour vérifier le rendu du template.</p>
-</body>
-</html>
+{% extends "training/base.html" %}
+{% block title %}Accueil — Muscu{% endblock %}
+{% block content %}
+  <h1>Bienvenue sur Muscu</h1>
+  <p class="muted">Conseils d'entraînement, nutrition et chat en direct.</p>
+
+  <div class="grid" style="margin-top:16px;">
+    <div class="card">
+      <h3>Exercices</h3>
+      <p>Catalogue filtrable par catégorie et difficulté.</p>
+      <a href="{% url 'exercices' %}">Voir les exercices →</a>
+    </div>
+    <div class="card">
+      <h3>Nutrition</h3>
+      <p>Conseils simples et actionnables.</p>
+      <a href="{% url 'nutrition' %}">Voir la nutrition →</a>
+    </div>
+    <div class="card">
+      <h3>Chat en direct</h3>
+      <p>Pose tes questions, discute avec les autres.</p>
+      <a href="{% url 'exercices' %}#chat">Ouvrir le chat →</a>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{% block title %}Muscu — Fitness{% endblock %}</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin:0; background:#0f172a; color:#e2e8f0;}
+    header, footer { background:#111827; padding:14px 20px; }
+    a { color:#93c5fd; text-decoration:none; }
+    nav a { margin-right:16px; }
+    .container { max-width: 1000px; margin: 24px auto; padding: 0 16px; }
+    .card { background:#111827; border:1px solid #1f2937; border-radius:12px; padding:16px; margin-bottom:12px; }
+    .tag { font-size:12px; background:#1f2937; padding:4px 8px; border-radius:999px; margin-left:8px;}
+    .muted { color:#9ca3af; font-size:14px; }
+    .grid { display:grid; gap:12px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+    input, textarea, select, button { background:#0b1220; color:#e5e7eb; border:1px solid #1f2937; border-radius:8px; padding:10px;}
+    button { cursor:pointer; }
+    .chat { position:sticky; bottom:0; background:#0b1220; border-top:1px solid #1f2937; padding:12px; }
+    .chat-log { max-height:240px; overflow:auto; padding:8px; background:#0b1220; border:1px solid #1f2937; border-radius:8px; }
+    .pill { font-size:12px; padding:2px 8px; border-radius:999px; border:1px solid #374151; }
+  </style>
+  {% block head %}{% endblock %}
+</head>
+<body>
+<header>
+  <nav class="container">
+    <a href="{% url 'home' %}"><strong>🏋️ Muscu</strong></a>
+    <a href="{% url 'exercices' %}">Exercices</a>
+    <a href="{% url 'nutrition' %}">Nutrition</a>
+    <a href="/admin/">Admin</a>
+  </nav>
+</header>
+
+<main class="container">
+  {% block content %}{% endblock %}
+</main>
+
+<footer>
+  <div class="container muted">© {{ now|default:"" }} Muscu — Démo éducative</div>
+</footer>
+
+{% block scripts %}{% endblock %}
+</body>
+</html>
