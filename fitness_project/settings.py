@@ -1,5 +1,5 @@
-import os
 from pathlib import Path
+<<<<<<< HEAD
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -7,6 +7,18 @@ SECRET_KEY = 'django-insecure-dev-key-change-me'
 DEBUG = True
 ALLOWED_HOSTS = ["*"]  # pour dev/démo
 
+=======
+import os
+# Base directory
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Security settings
+SECRET_KEY = 'your-secret-key'
+DEBUG = True
+ALLOWED_HOSTS = []
+
+# Installed apps
+>>>>>>> 22d47467b6b2bad1ca72695fa94076d6d096d5c1
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -16,8 +28,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'channels',
     'training',
+    'chat',
+    'api' ,
 ]
 
+# Middleware
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -28,12 +43,18 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# URL configuration
 ROOT_URLCONF = 'fitness_project.urls'
 
+# Templates
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
+<<<<<<< HEAD
         'DIRS': [BASE_DIR / 'templates'],  # /templates
+=======
+        'DIRS': [BASE_DIR / 'templates'],  # Indique à Django de chercher les templates ici
+>>>>>>> 22d47467b6b2bad1ca72695fa94076d6d096d5c1
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -46,9 +67,17 @@ TEMPLATES = [
     },
 ]
 
+<<<<<<< HEAD
 WSGI_APPLICATION = 'fitness_project.wsgi.application'
 ASGI_APPLICATION = 'fitness_project.asgi.application'
 
+=======
+# WSGI and ASGI application
+WSGI_APPLICATION = 'fitness_project.wsgi.application'
+ASGI_APPLICATION = 'fitness_project.asgi.application'
+
+# Database
+>>>>>>> 22d47467b6b2bad1ca72695fa94076d6d096d5c1
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -56,6 +85,7 @@ DATABASES = {
     }
 }
 
+<<<<<<< HEAD
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -74,8 +104,25 @@ STATICFILES_DIRS = [BASE_DIR / 'static'] if (BASE_DIR / 'static').exists() else 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Channels — backend en mémoire (aucun Redis requis pour ta démo)
+=======
+# Static files (CSS, JavaScript, Images)
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']
+
+# WebSocket configuration
+>>>>>>> 22d47467b6b2bad1ca72695fa94076d6d096d5c1
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels.layers.InMemoryChannelLayer',
     },
 }
+# URL pour accéder aux fichiers statiques
+STATIC_URL = '/static/'
+
+# Dossier contenant les fichiers statiques de ton projet
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+
+# Emplacement où collecter les fichiers statiques avec collectstatic
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
+AUTH_USER_MODEL = 'training.CustomUser'
