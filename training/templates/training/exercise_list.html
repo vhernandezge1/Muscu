@@ -1,60 +1,120 @@
 {% extends "training/base.html" %}
-
 {% block title %}Exercices - Muscu{% endblock %}
 
 {% block content %}
 <h1>Exercices de Musculation</h1>
 
-<div class="row">
-  {% for exercise in exercises %}
-  <div class="col-md-4 mb-3">
-    <div class="card h-100">
-      <div class="card-body">
-        <h5 class="card-title">{{ exercise.name }}</h5>
-        <h6 class="card-subtitle mb-2 text-muted">{{ exercise.muscle_group }}</h6>
-        <p class="card-text">{{ exercise.description }}</p>
-        <span class="badge bg-info">{{ exercise.difficulty }}</span>
-      </div>
-    </div>
-  </div>
-  {% endfor %}
+<div class="exercises">
+    {% for exercise in exercises %}
+        <div>
+            <strong>{{ exercise.name }}</strong><br>
+            {{ exercise.muscle_group }}<br>
+            {{ exercise.description }}<br>
+            {{ exercise.difficulty }}
+        </div>
+    {% endfor %}
 </div>
 
 <hr>
-
 <h3>💬 Chat en direct</h3>
 
-<div id="chat-box" class="border rounded p-3 mb-3" 
-     style="height:200px; overflow-y:scroll; background:#fff;">
-</div>
+<!-- Champ pseudo -->
+<label for="username">Votre pseudo :</label>
+<input id="username" type="text" placeholder="Entrez votre pseudo" value="Invité">
 
-<div class="d-flex">
-  <input id="chat-message-input" type="text" class="form-control me-2" placeholder="Votre message...">
-  <button id="chat-message-submit" class="btn btn-primary">Envoyer</button>
-</div>
+<!-- Zone des messages -->
+<div id="chat-log" class="chat-log"></div>
+
+<!-- Input message -->
+<input id="chat-message-input" type="text" placeholder="Votre message...">
+<button id="chat-message-submit">Envoyer</button>
+
+<style>
+.chat-log {
+    max-height: 300px;
+    overflow-y: auto;
+    padding: 10px;
+    background: #111827; /* fond gris foncé */
+    border-radius: 10px;
+    margin: 10px 0;
+}
+
+/* Chaque message */
+.message {
+    margin: 5px 0;
+    padding: 8px 12px;
+    border-radius: 15px;
+    display: inline-block;
+    max-width: 70%;
+    word-wrap: break-word;
+    clear: both;
+    font-size: 0.9rem;
+}
+
+/* Messages de l’utilisateur courant */
+.message.self {
+    background: #2563eb; /* bleu */
+    color: white;
+    float: right;
+    text-align: right;
+}
+
+/* Messages des autres */
+.message.other {
+    background: #374151; /* gris */
+    color: white;
+    float: left;
+    text-align: left;
+}
+</style>
 
 <script>
-  const chatSocket = new WebSocket(
-      'ws://' + window.location.host + '/ws/chat/'
-  );
+    // Nom du salon (modifiable pour plusieurs canaux)
+    const roomName = "muscu";
 
-  chatSocket.onmessage = function(e) {
-      const data = JSON.parse(e.data);
-      const chatBox = document.querySelector("#chat-box");
-      const msg = document.createElement("div");
-      msg.textContent = "👤 " + data.message;
-      chatBox.appendChild(msg);
-      chatBox.scrollTop = chatBox.scrollHeight; // auto-scroll
-  };
+    // WebSocket
+    const chatSocket = new WebSocket(
+        'ws://' + window.location.host + '/ws/chat/' + roomName + '/'
+    );
 
-  document.querySelector("#chat-message-submit").onclick = function(e) {
-      const input = document.querySelector("#chat-message-input");
-      if (input.value.trim() !== "") {
-          chatSocket.send(JSON.stringify({
-              'message': input.value
-          }));
-          input.value = '';
-      }
-  };
+    // Pseudo utilisateur
+    const usernameInput = document.querySelector('#username');
+    let username = usernameInput.value;
+
+    usernameInput.addEventListener("change", () => {
+        username = usernameInput.value || "Invité";
+    });
+
+    // Réception d’un message
+    chatSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        const chatLog = document.querySelector('#chat-log');
+        const msg = document.createElement('div');
+
+        msg.className = (data.username === username) ? "message self" : "message other";
+        msg.innerText = `${data.username}: ${data.message}`;
+        
+        chatLog.appendChild(msg);
+        chatLog.scrollTop = chatLog.scrollHeight; // auto-scroll
+    };
+
+    chatSocket.onopen = () => console.log("✅ WebSocket connecté");
+    chatSocket.onclose = () => console.error("❌ WebSocket fermé");
+
+    // Envoi d’un message
+    document.querySelector('#chat-message-submit').onclick = function(e) {
+        const messageInputDom = document.querySelector('#chat-message-input');
+        const message = messageInputDom.value;
+
+        if (message.trim() !== "") {
+            console.log("📤 Envoi du message:", message);
+            chatSocket.send(JSON.stringify({
+                'username': username,
+                'message': message
+            }));
+            messageInputDom.value = '';
+        }
+    };
 </script>
+
 {% endblock %}
