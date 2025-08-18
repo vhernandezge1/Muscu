@@ -31,6 +31,6 @@ class CustomUserTests(TestCase):
             email="admin@example.com",
             password="adminpassword123"
         )
-        self.assertEqual(superuser.role, "student")  # Par défaut si non modifié
+        self.assertEqual(superuser.role, "student")  
         self.assertTrue(superuser.is_superuser)
         self.assertTrue(superuser.is_staff)
