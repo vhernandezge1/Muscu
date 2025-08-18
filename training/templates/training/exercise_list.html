@@ -18,7 +18,14 @@
 <hr>
 <h3>💬 Chat en direct</h3>
 
-<!-- Champ pseudo -->
+<!-- Choix du salon et pseudo -->
+<label for="room">Salon :</label>
+<select id="room">
+    <option value="muscu">Muscu</option>
+    <option value="nutrition">Nutrition</option>
+    <option value="general">Général</option>
+</select>
+
 <label for="username">Votre pseudo :</label>
 <input id="username" type="text" placeholder="Entrez votre pseudo" value="Invité">
 
@@ -34,12 +41,11 @@
     max-height: 300px;
     overflow-y: auto;
     padding: 10px;
-    background: #111827; /* fond gris foncé */
+    background: #111827; /* gris foncé */
     border-radius: 10px;
     margin: 10px 0;
 }
 
-/* Chaque message */
 .message {
     margin: 5px 0;
     padding: 8px 12px;
@@ -48,10 +54,8 @@
     max-width: 70%;
     word-wrap: break-word;
     clear: both;
-    font-size: 0.9rem;
 }
 
-/* Messages de l’utilisateur courant */
 .message.self {
     background: #2563eb; /* bleu */
     color: white;
@@ -59,62 +63,113 @@
     text-align: right;
 }
 
-/* Messages des autres */
 .message.other {
     background: #374151; /* gris */
     color: white;
     float: left;
-    text-align: left;
+}
+
+/* Style meta infos */
+.meta {
+    display: block;
+    font-size: 0.8em;
+    margin-bottom: 3px;
+}
+
+/* Couleurs pseudo */
+.username-color-0 { color: #60a5fa; } /* bleu */
+.username-color-1 { color: #34d399; } /* vert */
+.username-color-2 { color: #f472b6; } /* rose */
+.username-color-3 { color: #facc15; } /* jaune */
+.username-color-4 { color: #a78bfa; } /* violet */
+
+.time {
+    color: #9ca3af; /* gris clair */
+    margin-left: 5px;
+    font-size: 0.75em;
 }
 </style>
 
 <script>
-    // Nom du salon (modifiable pour plusieurs canaux)
-    const roomName = "muscu";
+let chatSocket = null;
+let username = document.querySelector('#username').value;
+let roomName = document.querySelector('#room').value;
 
-    // WebSocket
-    const chatSocket = new WebSocket(
+// Génère une couleur pseudo constante
+function getColorClass(username) {
+    const colors = 5;
+    let hash = 0;
+    for (let i = 0; i < username.length; i++) {
+        hash = username.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const index = Math.abs(hash) % colors;
+    return "username-color-" + index;
+}
+
+// Connexion WS
+function connectWebSocket() {
+    if (chatSocket) {
+        chatSocket.close();
+    }
+
+    chatSocket = new WebSocket(
         'ws://' + window.location.host + '/ws/chat/' + roomName + '/'
     );
 
-    // Pseudo utilisateur
-    const usernameInput = document.querySelector('#username');
-    let username = usernameInput.value;
+    chatSocket.onopen = () => console.log("✅ WebSocket connecté au salon:", roomName);
+    chatSocket.onclose = () => console.log("❌ WebSocket fermé");
 
-    usernameInput.addEventListener("change", () => {
-        username = usernameInput.value || "Invité";
-    });
-
-    // Réception d’un message
     chatSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
         const chatLog = document.querySelector('#chat-log');
         const msg = document.createElement('div');
 
-        msg.className = (data.username === username) ? "message self" : "message other";
-        msg.innerText = `${data.username}: ${data.message}`;
-        
-        chatLog.appendChild(msg);
-        chatLog.scrollTop = chatLog.scrollHeight; // auto-scroll
-    };
-
-    chatSocket.onopen = () => console.log("✅ WebSocket connecté");
-    chatSocket.onclose = () => console.error("❌ WebSocket fermé");
-
-    // Envoi d’un message
-    document.querySelector('#chat-message-submit').onclick = function(e) {
-        const messageInputDom = document.querySelector('#chat-message-input');
-        const message = messageInputDom.value;
-
-        if (message.trim() !== "") {
-            console.log("📤 Envoi du message:", message);
-            chatSocket.send(JSON.stringify({
-                'username': username,
-                'message': message
-            }));
-            messageInputDom.value = '';
+        if (data.username === username) {
+            msg.className = "message self";
+        } else {
+            msg.className = "message other";
         }
+
+        // heure locale
+        const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+        msg.innerHTML = `
+            <span class="meta">
+                <span class="${getColorClass(data.username)}">${data.username}</span>
+                <span class="time">${time}</span>
+            </span>
+            ${data.message}
+        `;
+
+        chatLog.appendChild(msg);
+        chatLog.scrollTop = chatLog.scrollHeight;
     };
+}
+
+// Update pseudo et salon
+document.querySelector('#username').addEventListener("change", e => {
+    username = e.target.value;
+});
+document.querySelector('#room').addEventListener("change", e => {
+    roomName = e.target.value;
+    connectWebSocket();
+});
+
+// Envoi message
+document.querySelector('#chat-message-submit').onclick = function() {
+    const messageInputDom = document.querySelector('#chat-message-input');
+    const message = messageInputDom.value;
+    if (message.trim() !== "") {
+        chatSocket.send(JSON.stringify({
+            'username': username,
+            'message': message
+        }));
+        messageInputDom.value = '';
+    }
+};
+
+// Connexion initiale
+connectWebSocket();
 </script>
 
 {% endblock %}

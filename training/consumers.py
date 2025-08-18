@@ -3,46 +3,44 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
+        # Récupération du nom de la salle depuis l’URL
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = f"chat_{self.room_name}"
 
-        # Join room group
+        # Joindre le groupe de la salle
         await self.channel_layer.group_add(
             self.room_group_name,
             self.channel_name
         )
+
         await self.accept()
 
     async def disconnect(self, close_code):
-        # Leave room group
+        # Quitter le groupe quand l’utilisateur ferme
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
         )
 
-    # Réception du message depuis WebSocket
+    # Réception d’un message du WebSocket
     async def receive(self, text_data):
         data = json.loads(text_data)
+        username = data['username']
         message = data['message']
-        username = data.get('username', "Anonyme")
 
-        # Envoi au groupe
+        # Envoyer à tout le groupe
         await self.channel_layer.group_send(
             self.room_group_name,
             {
-                'type': 'chat_message',
-                'message': message,
-                'username': username
+                "type": "chat_message",
+                "username": username,
+                "message": message
             }
         )
 
-    # Réception du message depuis le groupe
+    # Réception depuis le groupe
     async def chat_message(self, event):
-        message = event['message']
-        username = event['username']
-
-        # Envoi aux WebSockets
         await self.send(text_data=json.dumps({
-            'message': message,
-            'username': username
+            "username": event["username"],
+            "message": event["message"]
         }))
