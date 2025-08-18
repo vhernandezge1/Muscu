@@ -6,7 +6,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.room_group_name = "global_chat"
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.accept()
-        # Message de bienvenue
+        # message de bienvenue
         await self.channel_layer.group_send(self.room_group_name, {
             "type": "chat_message",
             "message": "🤖 Le chat est connecté. Dites bonjour !"
@@ -20,11 +20,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
             return
         try:
             data = json.loads(text_data)
+            message = (data.get("message") or "").strip()
         except json.JSONDecodeError:
-            data = {"message": text_data}
-        message = (data.get("message") or "").strip()
+            message = (text_data or "").strip()
+
         if not message:
             return
+
         user = self.scope["user"].username if self.scope["user"].is_authenticated else "Anonyme"
         await self.channel_layer.group_send(self.room_group_name, {
             "type": "chat_message",
@@ -32,13 +34,4 @@ class ChatConsumer(AsyncWebsocketConsumer):
         })
 
     async def chat_message(self, event):
-<<<<<<< HEAD
         await self.send(text_data=json.dumps({"message": event["message"]}))
-=======
-        message = event['message']
-
-        # Envoyer le message au WebSocket
-        await self.send(text_data=json.dumps({
-            'message': message
-        }))
->>>>>>> 22d47467b6b2bad1ca72695fa94076d6d096d5c1

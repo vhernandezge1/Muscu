@@ -1,85 +1,60 @@
 {% extends "training/base.html" %}
-{% block title %}Exercices — Muscu{% endblock %}
+
+{% block title %}Exercices - Muscu{% endblock %}
 
 {% block content %}
-  <h1>Exercices de Musculation</h1>
+<h1>Exercices de Musculation</h1>
 
-  <form method="get" class="card" style="display:flex; gap:8px; flex-wrap:wrap;">
-    <input type="text" name="q" placeholder="Rechercher un exercice…" value="{{ request.GET.q|default:'' }}">
-    <select name="cat">
-      <option value="">Toutes catégories</option>
-      {% for c in exercises.values_list('category', flat=True).distinct %}
-        <option value="{{ c }}" {% if request.GET.cat == c %}selected{% endif %}>{{ c }}</option>
-      {% endfor %}
-    </select>
-    <select name="diff">
-      <option value="">Toutes difficultés</option>
-      <option value="easy" {% if request.GET.diff == 'easy' %}selected{% endif %}>Facile</option>
-      <option value="medium" {% if request.GET.diff == 'medium' %}selected{% endif %}>Moyenne</option>
-      <option value="hard" {% if request.GET.diff == 'hard' %}selected{% endif %}>Difficile</option>
-    </select>
-    <button type="submit">Filtrer</button>
-  </form>
-
-  <div class="grid">
-    {% for e in exercises %}
-      {% if (not request.GET.q or e.name|lower|contains:request.GET.q|lower) and
-            (not request.GET.cat or e.category == request.GET.cat) and
-            (not request.GET.diff or e.difficulty == request.GET.diff) %}
-      <div class="card">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <h3>{{ e.name }}</h3>
-          <span class="pill">{{ e.get_difficulty_display }}</span>
-        </div>
-        <div class="muted">{{ e.category }}</div>
-        <p style="margin-top:8px;">{{ e.description }}</p>
+<div class="row">
+  {% for exercise in exercises %}
+  <div class="col-md-4 mb-3">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title">{{ exercise.name }}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">{{ exercise.muscle_group }}</h6>
+        <p class="card-text">{{ exercise.description }}</p>
+        <span class="badge bg-info">{{ exercise.difficulty }}</span>
       </div>
-      {% endif %}
-    {% empty %}
-      <p>Aucun exercice pour le moment.</p>
-    {% endfor %}
-  </div>
-
-  <h2 id="chat" style="margin-top:24px;">💬 Chat en direct</h2>
-  <div class="card">
-    <div id="chat-log" class="chat-log" aria-live="polite"></div>
-    <div class="chat" style="display:flex; gap:8px; margin-top:8px;">
-      <input id="chat-message-input" type="text" placeholder="Votre message…" aria-label="Message">
-      <button id="chat-send">Envoyer</button>
     </div>
   </div>
-{% endblock %}
+  {% endfor %}
+</div>
 
-{% block scripts %}
+<hr>
+
+<h3>💬 Chat en direct</h3>
+
+<div id="chat-box" class="border rounded p-3 mb-3" 
+     style="height:200px; overflow-y:scroll; background:#fff;">
+</div>
+
+<div class="d-flex">
+  <input id="chat-message-input" type="text" class="form-control me-2" placeholder="Votre message...">
+  <button id="chat-message-submit" class="btn btn-primary">Envoyer</button>
+</div>
+
 <script>
-(function(){
-  const protocol = (location.protocol === 'https:') ? 'wss' : 'ws';
-  const socket = new WebSocket(protocol + '://' + window.location.host + '/ws/chat/');
+  const chatSocket = new WebSocket(
+      'ws://' + window.location.host + '/ws/chat/'
+  );
 
-  const log = document.getElementById('chat-log');
-  const input = document.getElementById('chat-message-input');
-  const btn = document.getElementById('chat-send');
-
-  socket.onmessage = (e) => {
-    try {
+  chatSocket.onmessage = function(e) {
       const data = JSON.parse(e.data);
-      const p = document.createElement('p');
-      p.textContent = data.message;
-      log.appendChild(p);
-      log.scrollTop = log.scrollHeight;
-    } catch(_) {}
+      const chatBox = document.querySelector("#chat-box");
+      const msg = document.createElement("div");
+      msg.textContent = "👤 " + data.message;
+      chatBox.appendChild(msg);
+      chatBox.scrollTop = chatBox.scrollHeight; // auto-scroll
   };
 
-  function send() {
-    const msg = (input.value || '').trim();
-    if (!msg) return;
-    socket.send(JSON.stringify({ message: msg }));
-    input.value = '';
-    input.focus();
-  }
-
-  btn.addEventListener('click', send);
-  input.addEventListener('keydown', (e) => { if (e.key === 'Enter') send(); });
-})();
+  document.querySelector("#chat-message-submit").onclick = function(e) {
+      const input = document.querySelector("#chat-message-input");
+      if (input.value.trim() !== "") {
+          chatSocket.send(JSON.stringify({
+              'message': input.value
+          }));
+          input.value = '';
+      }
+  };
 </script>
 {% endblock %}

@@ -16,7 +16,6 @@
     .grid { display:grid; gap:12px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
     input, textarea, select, button { background:#0b1220; color:#e5e7eb; border:1px solid #1f2937; border-radius:8px; padding:10px;}
     button { cursor:pointer; }
-    .chat { position:sticky; bottom:0; background:#0b1220; border-top:1px solid #1f2937; padding:12px; }
     .chat-log { max-height:240px; overflow:auto; padding:8px; background:#0b1220; border:1px solid #1f2937; border-radius:8px; }
     .pill { font-size:12px; padding:2px 8px; border-radius:999px; border:1px solid #374151; }
   </style>
@@ -37,9 +36,10 @@
 </main>
 
 <footer>
-  <div class="container muted">© {{ now|default:"" }} Muscu — Démo éducative</div>
+  <div class="container muted">© Muscu — Démo éducative</div>
 </footer>
 
 {% block scripts %}{% endblock %}
 </body>
 </html>
+  
