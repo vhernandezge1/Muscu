@@ -2,6 +2,8 @@ import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+LOG_DIR = BASE_DIR / "logs"
+LOG_DIR.mkdir(exist_ok=True)
 
 SECRET_KEY = 'django-insecure-dev-key-change-me'
 DEBUG = True
@@ -86,7 +88,7 @@ LOGGING = {
         'file': {
             'level': 'ERROR',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs/errors.log'),
+            'filename': str(LOG_DIR / "errors.log"),
         },
     },
     'loggers': {
